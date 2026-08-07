@@ -1,0 +1,21 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+    ":semanticCommits",
+    ":disableRateLimiting",
+  ],
+  timezone: "Asia/Shanghai",
+  schedule: ["before 6am"],
+  labels: ["dependencies"],
+  rangeStrategy: "bump",
+  packageRules: [
+    {
+      // minor/patch 自动合并,major 仍需人工 review
+      matchUpdateTypes: ["minor", "patch"],
+      automerge: true,
+      automergeType: "pr",
+      platformAutomerge: true,
+    },
+  ],
+}
