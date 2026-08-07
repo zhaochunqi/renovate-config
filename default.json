@@ -13,6 +13,12 @@
   // automerge 只给非 major,major 升级留 PR 人工审
   "packageRules": [
     {
+      // 只禁 npm 里的 node 包;Docker node 镜像和 engines/.nvmrc 照常更新
+      "matchManagers": ["npm"],
+      "matchDepNames": ["node"],
+      "enabled": false
+    },
+    {
       "matchDepTypes": ["peerDependencies"],
       "enabled": false
     },
@@ -20,6 +26,5 @@
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     }
-  ],
-  "ignoreDeps": ["node"]
+  ]
 }
