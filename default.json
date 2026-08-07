@@ -6,11 +6,13 @@
     ":disableRateLimiting"
   ],
   "timezone": "Asia/Shanghai",
+  // 只在每天早上 6 点前跑,避免工作时间打扰
   "schedule": ["before 6am"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
   "packageRules": [
     {
+      // minor/patch 自动合并,major 仍需人工 review
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "pr",
