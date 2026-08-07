@@ -4,18 +4,21 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "group:allNonMajor"
+    "group:allNonMajor",
+    "helpers:pinGitHubActionDigests"
   ],
   "rangeStrategy": "bump",
   "dependencyDashboard": false,
   "labels": ["dependencies", "renovate"],
-  "automerge": true,
-  // 免费版私有仓库用不了 GitHub 原生 auto-merge,由 Renovate 自己合并
-  "platformAutomerge": false,
+  // automerge 只给非 major,major 升级留 PR 人工审
   "packageRules": [
     {
       "matchDepTypes": ["peerDependencies"],
       "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
     }
   ],
   "ignoreDeps": ["node"]
