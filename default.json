@@ -1,22 +1,22 @@
 {
+  // 本文件由 Renovate 用 JSON5 解析器读取,注释和尾逗号是合法的,
+  // 编辑器按严格 JSON 报的错可以忽略(不用管黄线)。
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":semanticCommits",
-    ":disableRateLimiting"
+    "group:allNonMajor"
   ],
-  "timezone": "Asia/Shanghai",
-  // 只在每天早上 6 点前跑,避免工作时间打扰
-  "schedule": ["before 6am"],
-  "labels": ["dependencies"],
   "rangeStrategy": "bump",
+  "dependencyDashboard": false,
+  "labels": ["dependencies", "renovate"],
+  "automerge": true,
+  // 免费版私有仓库用不了 GitHub 原生 auto-merge,由 Renovate 自己合并
+  "platformAutomerge": false,
   "packageRules": [
     {
-      // minor/patch 自动合并,major 仍需人工 review
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
+      "matchDepTypes": ["peerDependencies"],
+      "enabled": false
     }
-  ]
+  ],
+  "ignoreDeps": ["node"]
 }
