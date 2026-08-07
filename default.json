@@ -8,6 +8,8 @@
     "helpers:pinGitHubActionDigests"
   ],
   "rangeStrategy": "bump",
+  // Renovate 自己合并,不依赖各 repo 的 "Allow auto-merge" 设置
+  "platformAutomerge": false,
   "dependencyDashboard": false,
   "labels": ["dependencies", "renovate"],
   // automerge 只给非 major,major 升级留 PR 人工审
