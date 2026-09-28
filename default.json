@@ -21,7 +21,9 @@
       "enabled": false
     },
     {
+      // peer 依赖只挡 breaking 的 major/minor,patch(常是别人的兼容修复)照常更新
       "matchDepTypes": ["peerDependencies"],
+      "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
     {
