@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
+  # 定时跑,用来发现上游 schema / validator 的 breaking 变更
+  schedule:
+    - cron: "17 6 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   renovate-config-validator:
@@ -15,7 +22,9 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24.21.0
-      - run: npx --yes --package renovate@latest renovate-config-validator --strict default.json
+      # 钉死版本:用 latest 的话上游发个 breaking 变更,CI 会在没人改代码的情况下红。
+      # 想升级时手动改这里,顺手过一遍 diff。
+      - run: npx --yes --package renovate@44.115.13 renovate-config-validator --strict default.json
 
 permissions:
   contents: read

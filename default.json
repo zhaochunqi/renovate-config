@@ -3,15 +3,30 @@
   // 编辑器按严格 JSON 报的错可以忽略(不用管黄线)。
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
+    // config:recommended 已包含 helpers:pinGitHubActionDigests,不用重复写
     "config:recommended",
     "group:allNonMajor",
-    "helpers:pinGitHubActionDigests"
+    ":maintainLockFilesWeekly",
+    // 检测废弃/恶意包(比如 event-stream、colors 等)
+    "abandonments:recommended"
   ],
   "rangeStrategy": "bump",
-  // Renovate 自己合并,不依赖各 repo 的 "Allow auto-merge" 设置
+  // Renovate 自己合并,不依赖各 repo 的 "Allow auto-merge" 设置。
+  // 保持 false,否则 automergeSchedule 之类的约束不会生效。
   "platformAutomerge": false,
+  // 覆盖 config:recommended 里的 :dependencyDashboard。
+  // 副作用:下游 repo 若用 prCreation: "approval" 或 dependencyDashboardApproval,
+  // PR 将永远不会创建,需要在自己 renovate.json 里显式改回去。
   "dependencyDashboard": false,
+  // 新版本先冷静 3 天再自动合并,给投毒/回滚留观察期。
+  // PR 会立刻创建,只是等满时间才合。
+  "minimumReleaseAge": "3 days",
   "labels": ["dependencies", "renovate"],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    // 安全修复不等冷静期
+    "minimumReleaseAge": null
+  },
   // automerge 只给非 major,major 升级留 PR 人工审
   "packageRules": [
     {
@@ -21,11 +36,13 @@
       "enabled": false
     },
     {
+      // peer 依赖只挡 breaking 的 major/minor,patch(常是别人的兼容修复)照常更新
       "matchDepTypes": ["peerDependencies"],
+      "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"],
       "automerge": true
     }
   ]
