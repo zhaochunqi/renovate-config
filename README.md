@@ -46,9 +46,9 @@
 
 ## 当前 preset 的几个已知副作用
 
-- `minimumReleaseAge: 3 days`:新版本 PR 会立刻创建,只是等满 3 天才自动合并。`vulnerabilityAlerts` 里关掉了这个限制,安全修复不等。
-- `config:recommended` 带了 `mergeConfidence: age-confidence-badges`:置信度低的非 major 更新**不会**被自动合并,会留成开放 PR 等人看。这是预期行为。
-- `dependencyDashboard: false` 覆盖了 `config:recommended` 的 `:dependencyDashboard`。副作用:下游若用 `prCreation: "approval"` 或 `dependencyDashboardApproval`,PR 永远不会创建,得在自己配置里改回去。
+- `minimumReleaseAge: 14 days`:新版本 PR 会立刻创建,只是等满 14 天才自动合并(`prCreation` 默认 `immediate`,冷静期只挡 automerge)。npm 是例外,preset 内置 3 天冷静期;安全修复(`vulnerabilityAlerts`)不等冷静期,是上游默认行为。
+- `config:best-practices` 带来 GitHub Actions / Docker digest pin、devDependencies pin、config migration PR、weekly lockfile maintenance、abandonments 检测。
+- `dependencyDashboard: false` 覆盖了 preset 里的 `:dependencyDashboard`。副作用:下游若用 `prCreation: "approval"` 或 `dependencyDashboardApproval`,PR 永远不会创建,得在自己配置里改回去。
 - `lockFileMaintenance` 也在 automerge 白名单里,锁文件刷新 PR 会自动合。
 
 ## 注意
